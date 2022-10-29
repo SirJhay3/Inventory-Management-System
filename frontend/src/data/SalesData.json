@@ -1,0 +1,72 @@
+[
+  {
+    "id": 1,
+    "quantity": 5,
+    "description": "Pasta - Linguini, Dry",
+    "unit_price": 1823,
+    "amount": 8862
+  },
+  {
+    "id": 2,
+    "quantity": 10,
+    "description": "Plasticknivesblack",
+    "unit_price": 1702,
+    "amount": 32252
+  },
+  {
+    "id": 3,
+    "quantity": 1,
+    "description": "Venison - Racks Frenched",
+    "unit_price": 2958,
+    "amount": 10474
+  },
+  {
+    "id": 4,
+    "quantity": 7,
+    "description": "Wine - Cahors Ac 2000, Clos",
+    "unit_price": 2015,
+    "amount": 41086
+  },
+  {
+    "id": 5,
+    "quantity": 1,
+    "description": "Chocolate - Semi Sweet, Calets",
+    "unit_price": 1465,
+    "amount": 43179
+  },
+  {
+    "id": 6,
+    "quantity": 1,
+    "description": "Bacardi Mojito",
+    "unit_price": 2894,
+    "amount": 30702
+  },
+  {
+    "id": 7,
+    "quantity": 5,
+    "description": "Vodka - Moskovskaya",
+    "unit_price": 1182,
+    "amount": 19287
+  },
+  {
+    "id": 8,
+    "quantity": 10,
+    "description": "Veal - Brisket, Provimi,bnls",
+    "unit_price": 1731,
+    "amount": 34330
+  },
+  {
+    "id": 9,
+    "quantity": 9,
+    "description": "Soup - Campbells, Creamy",
+    "unit_price": 2960,
+    "amount": 25233
+  },
+  {
+    "id": 10,
+    "quantity": 3,
+    "description": "Bread - Olive Dinner Roll",
+    "unit_price": 2888,
+    "amount": 18524
+  }
+]

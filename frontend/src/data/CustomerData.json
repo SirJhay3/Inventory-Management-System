@@ -1,0 +1,21 @@
+[
+  {
+    "date": "23/10/22",
+    "description": "Closing balance",
+    "balance": 10000
+  },
+  {
+    "date": "23/10/22",
+    "description": "Payment",
+    "ref": "Cash",
+    "amount": 20000,
+    "balance": 10000
+  },
+  {
+    "date": "23/10/22",
+    "description": "Sales",
+    "ref": "0011",
+    "amount": 30000,
+    "balance": 30000
+  }
+]
