@@ -1,22 +1,25 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { FiSettings } from "react-icons/fi";
-import { IndividualSalesLog, Navbar, Sidebar, ThemeSettings, CustomerInfo, IndividualReturn, SingleProduct } from "./components/components";
+import { ToastContainer } from "react-toastify";
 import {
-  CompanyInfo,
-  CreateBranch,
-  Employee,
+  Navbar,
+  Sidebar,
+  ThemeSettings,
+  CustomerInfo,
+  IndividualReturn,
+  SingleProductInventoryLog,
+  SingleInvoice,
+  // NewCategory,
+  AddStock,
+  ViewStock,
+  Sales,
+  Returns,
+  SalesLog,
+  SalesEvaluation,
+  IndividualSalesLog,
   InvoiceListing,
   ReturnRecord,
-  StockTransferRecord,
   PurchaseListing,
-  WastageRecord,
-  Returns,
-  Sales,
-  SalesEvaluation,
-  SalesLog,
-  AddStocks,
-  StockTransfer,
-  ViewStocks,
   Dashboard,
   Customers,
   Orders,
@@ -24,14 +27,21 @@ import {
   PurchaseReturn,
   InventoryLog,
   Collections,
-} from "./pages/pages";
+} from "./exports";
 
 import "./App.css";
+import "react-toastify/dist/ReactToastify.css"; //
 
-import { useStateContext } from './contexts/ContextProvider';
+import { useStateContext } from "./contexts/ContextProvider";
 
 function App() {
-  const { activeMenu, themeSettings, setThemeSettings, currentColor, currentMode } = useStateContext();
+  const {
+    activeMenu,
+    themeSettings,
+    setThemeSettings,
+    currentColor,
+    currentMode,
+  } = useStateContext();
   // const activeMenu = true;
   return (
     <div className={currentMode === "Dark" ? "dark" : ""}>
@@ -74,9 +84,9 @@ function App() {
                 <Route path="/dashboard" element={<Dashboard />} />
 
                 {/* Inventory routes */}
-                <Route path="/stocks/view" element={<ViewStocks />} />
-                <Route path="/stocks/add" element={<AddStocks />} />
-                <Route path="/stocks/transfer" element={<StockTransfer />} />
+                <Route path="/stocks/view/*" element={<ViewStock />} />
+                <Route path="/stocks/add/*" element={<AddStock />} />
+                {/* <Route path="/stocks/category" element={<NewCategory />} /> */}
 
                 {/* Sales routes */}
                 <Route path="/sales/new" element={<Sales />} />
@@ -115,7 +125,7 @@ function App() {
                   path="/office/return-records/:id"
                   element={<IndividualReturn />}
                 />
-                <Route
+                {/* <Route
                   path="/office/wastage-records"
                   element={<WastageRecord />}
                 />
@@ -123,11 +133,16 @@ function App() {
                 <Route
                   path="/office/stock-transfer-records"
                   element={<StockTransferRecord />}
-                />
+                /> */}
                 <Route
-                  path="/office/invoice-listing"
+                  path="/office/invoice-listing/*"
                   element={<InvoiceListing />}
                 />
+                <Route
+                  path="/office/invoice-listing/:id"
+                  element={<SingleInvoice />}
+                />
+
                 <Route
                   path="/office/purchase-listing"
                   element={<PurchaseListing />}
@@ -139,10 +154,10 @@ function App() {
                 />
                 <Route
                   path="/office/inventory-log/product-name"
-                  element={<SingleProduct />}
+                  element={<SingleProductInventoryLog />}
                 />
 
-                <Route path="/office/company-info" element={<CompanyInfo />} />
+                {/* <Route path="/office/company-info" element={<CompanyInfo />} />
                 <Route
                   path="/office/create-branch-info"
                   element={<CreateBranch />}
@@ -150,12 +165,13 @@ function App() {
                 <Route
                   path="/office/register-employee"
                   element={<Employee />}
-                />
+                /> */}
               </Routes>
             </div>
           </div>
         </div>
       </BrowserRouter>
+      <ToastContainer autoClose={2000}/>
     </div>
   );
 }
