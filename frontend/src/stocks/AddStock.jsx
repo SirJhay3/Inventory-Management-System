@@ -9,7 +9,7 @@ import  NewCategory  from "./NewCategory";
 
 
 const viewCategory = async () => {
-  const data = await axios.get("/stocks/add/category");
+  const data = await axios.get("http://localhost:4000/stocks/add/category");
   return data;
 };
 const createOption = (option) => ({
@@ -42,7 +42,10 @@ const AddStocks = () => {
     try {
       setText("Submitting...");
       setIsLoading(true);
-      const response = await axios.post("/stocks/add", data);
+      const response = await axios.post(
+        "http://localhost:4000/stocks/add",
+        data
+      );
       toast.success(response.data.message);
       setProductName('');
       imageRef.current.value = null;

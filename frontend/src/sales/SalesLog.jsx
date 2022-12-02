@@ -1,11 +1,32 @@
+import axios from "axios";
 import React, { useState } from "react";
+import { format, parseISO } from "date-fns";
 import DatePicker from "react-datepicker";
+import { useQuery } from "react-query";
 import { Routes, Route, useNavigate } from "react-router-dom";
-import IndividualSalesLog  from "./IndividualSalesLog";
+import IndividualSalesLog from "./IndividualSalesLog";
+import { useStateContext } from "../contexts/ContextProvider";
+
+const getSalesDetails = async ({ queryKey }) => {
+  const salesInfo = await axios.get(
+    `http://localhost:4000/sales/?page=${queryKey[1]}&limit=6`
+  );
+  return salesInfo;
+};
 
 const SalesLog = () => {
+  const { setSalesId } = useStateContext();
   const navigate = useNavigate();
+  const [page, setPage] = useState(1);
   const [startDate, setStartDate] = useState(new Date());
+
+  const { data, status, isPreviousData } = useQuery(
+    ["salesLogInfo", page],
+    getSalesDetails,
+    {
+      keepPreviousData: true,
+    }
+  );
 
   return (
     <div className="m-4 mt-20 md:mt-12 md:flex  justify-center gap-3">
@@ -32,60 +53,69 @@ const SalesLog = () => {
             <table className="w-full whitespace-nowrap">
               <thead>
                 <tr className="h-16 w-full text-sm leading-none text-gray-800">
-                  <th className="font-semibold  text-left  pl-4">
+                  <th className="font-bold  text-left  pl-4">
                     Customer Name
                   </th>
-                  <th className="font-semi-bold text-left pl-4">Date</th>
-                  <th className="font-semibold text-left pl-4">Invoice No</th>
+                  <th className="font-bold text-left pl-4">Date</th>
+                  <th className="font-bold text-left pl-4">Invoice No</th>
                 </tr>
               </thead>
               <tbody className="w-full">
-                <tr className="h-20 text-sm leading-none text-gray-800 bg-white hover:bg-gray-100 border-b border-t border-gray-100">
-                  <td className="pl-4 cursor-pointer">
-                    <p className="font-medium">Israel Stores Bashorun</p>
-                  </td>
-                  <td className="pl-4 cursor-pointer">
-                    <p className="font-medium">12/10/22</p>
-                  </td>
-                  <td className="pl-4 cursor-pointer">
-                    <p className="font-medium">0011</p>
-                  </td>
-                </tr>
+                {data?.data.results.map((data) => {
+                  return (
+                    <tr
+                      key={data._id}
+                      onClick={() => {
+                        setSalesId(data._id)
+                        navigate(`/sales/logs/${data._id}`);
+                      }}
+                      className="h-20 text-sm leading-none text-gray-800 bg-white hover:bg-gray-100 border-b border-t border-gray-100"
+                    >
+                      <td className="pl-4 cursor-pointer">
+                        <p className="font-medium">{data.customerName}</p>
+                      </td>
+                      <td className="pl-4 cursor-pointer">
+                        <p className="font-medium">
+                          {format(parseISO(data.createdAt), "dd/MM/yyyy")}
+                        </p>
+                      </td>
 
-                <tr className="h-20 text-sm leading-none text-gray-800 bg-white hover:bg-gray-100 border-b border-t border-gray-100">
-                  <td className="pl-4 cursor-pointer">
-                    <p className="font-medium">Kennedy Stores</p>
-                  </td>
-                  <td className="pl-4 cursor-pointer">
-                    <p className="font-medium">12/10/22</p>
-                  </td>
-                  <td className="pl-4 cursor-pointer">
-                    <p className="font-medium">0256</p>
-                  </td>
-                </tr>
-
-                <tr
-                  className="h-20 text-sm leading-none text-gray-800 bg-white hover:bg-gray-100 border-b border-t border-gray-100"
-                  onClick={() => navigate("/sales/logs/0132")}
-                >
-                  <td className="pl-4 cursor-pointer">
-                    <p className="font-medium">Divine Rule Oreyo</p>
-                  </td>
-                  <td className="pl-4 cursor-pointer">
-                    <p className="font-medium">12/10/22</p>
-                  </td>
-                  <td className="pl-4 cursor-pointer">
-                    <p className="font-medium">0132</p>
-                  </td>
-                </tr>
+                      <td className="pl-4 cursor-pointer">
+                        <p className="font-medium">{data.invoiceNo}</p>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
+
+          {status === "success" && (
+            <div className="mt-4 flex justify-center items-center">
+              <button
+                className="border-2 p-2.5 rounded-md cursor-pointer mr-2 bg-gray-100
+                shadow disabled:cursor-not-allowed disabled:opacity-20"
+                onClick={() => setPage((old) => Math.max(old - 1, 1))}
+                disabled={page === 1}
+              >
+                Previous
+              </button>
+              <span>{page}</span>
+              <button
+                className="border-2 p-2.5 rounded-md cursor-pointer ml-2 bg-gray-100 shadow disabled:cursor-not-allowed disabled:opacity-20"
+                onClick={() => setPage((old) => old + 1)}
+                // Disable the Next Page button until we know a next page is available
+                disabled={isPreviousData || !data.data.next}
+              >
+                Next
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
       <Routes>
-        <Route path=":id" element={<IndividualSalesLog />} />
+        <Route path=":id" element={<IndividualSalesLog customerData={ data } />} />
       </Routes>
     </div>
   );

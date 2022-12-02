@@ -1,13 +1,31 @@
 import React, { useMemo } from "react";
 import { useTable } from "react-table";
-import { COLUMNS } from "./column";
-import SalesData from "../data/SalesData.json";
 import { useStateContext } from "../contexts/ContextProvider";
 
-const SalesTable = () => {
+const SalesTable = ({ salesData, isHighlighted, setIsHighlighted }) => {
   const { currentColor } = useStateContext();
-  const columns = useMemo(() => COLUMNS, []);
-  const data = useMemo(() => SalesData, []);
+  const columns = useMemo(
+    () => [
+      {
+        Header: "Quantity",
+        accessor: "quantity",
+      },
+      {
+        Header: "Description/Name",
+        accessor: "productName",
+      },
+      {
+        Header: "Unit Price",
+        accessor: "unitPrice",
+      },
+      {
+        Header: "Amount",
+        accessor: "amount",
+      },
+    ],
+    []
+  );
+  const data = useMemo(() => salesData, [salesData]);
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable({
@@ -45,8 +63,17 @@ const SalesTable = () => {
             prepareRow(row);
             return (
               <tr
-                className="hover:bg-neutral-300 even:bg-zinc-100"
+                className={`hover:bg-neutral-200 even:bg-zinc-100 ${
+                  isHighlighted === row.original
+                    ? "bg-slate-500 even:bg-slate-500 pointer-events-none"
+                    : ""
+                }`}
                 {...row.getRowProps()}
+                onClick={() => {
+                  setIsHighlighted((prev) =>
+                    prev !== null ? null : row.original
+                  );
+                }}
               >
                 {row.cells.map((cell) => {
                   return (

@@ -1,9 +1,22 @@
-const InvoiceListing = require('./invoiceListingModel')
+const InventoryLog = require("../inventoryLog/inventoryLogModel");
 
-const getAllInvoice = async (req, res) => {
-    const allInvoices = await InvoiceListing.find({});
+const getAllInvoice = (req, res) => {
+  res.json(res.paginatedResults);
+};
 
-    res.status(200).json(allInvoices);
-}
+const getSingleInvoice = async (req, res) => {
+    const { id } = req.params;
+    // console.log(id)
 
-module.exports = {getAllInvoice}
+  try {
+    const inventoryLog = await InventoryLog.find({ invoiceNo: +id }).populate(
+      "product"
+    );
+
+    res.status(200).json(inventoryLog);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+module.exports = { getAllInvoice, getSingleInvoice };

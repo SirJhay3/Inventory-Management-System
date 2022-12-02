@@ -7,7 +7,7 @@ import  EditStockModal  from "./EditStockModal";
 
 
 const ViewHandler = async() => {
-  const data = await axios.get('/stocks/view')
+  const data = await axios.get('http://localhost:4000/stocks/view')
   return data;
 }
 
@@ -20,6 +20,7 @@ const ViewStocks = () => {
     prodUnitPrice: '',
     prodId: ''
   })
+  // console.log(data);
   return (
     <>
       <div className="m-3 mt-16 md:mt-4 px-4 md:px-10 py-4 bg-gray-100 rounded-tl-lg rounded-tr-lg md:w-400 md:mx-auto">

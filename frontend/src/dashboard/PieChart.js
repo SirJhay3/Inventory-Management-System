@@ -1,12 +1,25 @@
 import React from 'react'
+import { useQuery } from "react-query";
+import axios from "axios";
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from "recharts";
 
-const data = [
-  { name: "Group A", value: 400 },
-  { name: "Group B", value: 300 },
-  { name: "Group C", value: 300 },
-  { name: "Group D", value: 200 },
-];
+const createData = (data) => {
+  var formattedData = [];
+
+  for (var i = 0; i < data.length; i++) {
+    formattedData.push({
+      name: data[i]._id,
+      value: data[i].count,
+    });
+  }
+  return formattedData;
+};
+// const data = [
+//   { name: "Group A", value: 400 },
+//   { name: "Group B", value: 300 },
+//   { name: "Group C", value: 300 },
+//   { name: "Group D", value: 200 },
+// ];
 
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
@@ -38,11 +51,14 @@ const renderCustomizedLabel = ({
 };
 
 const PieChartComponent = () => {
+  const { data} = useQuery("piechart", () => {
+    return axios.get("http://localhost:4000/dashboard/pie");
+  });
   return (
     <ResponsiveContainer width="99%" aspect={1.5}>
       <PieChart width={400} height={400}>
         <Pie
-          data={data}
+          data={createData(data ? data.data : [])}
           cx="50%"
           cy="50%"
           labelLine={false}
@@ -51,7 +67,7 @@ const PieChartComponent = () => {
           fill="#8884d8"
           dataKey="value"
         >
-          {data.map((entry, index) => (
+          {createData(data ? data.data : []).map((entry, index) => (
             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
           ))}
         </Pie>

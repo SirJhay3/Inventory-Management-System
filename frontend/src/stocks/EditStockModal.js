@@ -41,7 +41,10 @@ const EditStockModal = ({ stockDetails }) => {
     try {
       setText("Submitting...");
       setIsLoading(true);
-      const response = await axios.patch(`/stocks/view/${id}`, data);
+      const response = await axios.patch(
+        `http://localhost:4000/stocks/view/${id}`,
+        data
+      );
       toast.success(response.data.message);
       setInvoiceNo('');
       setQuantity('')

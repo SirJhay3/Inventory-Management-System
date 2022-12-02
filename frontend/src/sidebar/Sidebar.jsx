@@ -106,7 +106,7 @@ const Sidebar = () => {
                     title="Add New Stock"
                     customFunc={() => handleCloseSidebar()}
                   />
-                  
+
                   {/* <NavLinkFunc
                     link="stocks/transfer"
                     title="Stock Transfer"
@@ -159,7 +159,7 @@ const Sidebar = () => {
 
             {/* Purchases */}
             <div>
-              <div className="flex justify-between m-3 mt-4 items-center">
+              {/* <div className="flex justify-between m-3 mt-4 items-center">
                 <div className="flex gap-3 items-center ml-1">
                   <MdOutlineSell />
                   <p className="text-gray-500 uppercase">purchases</p>
@@ -170,10 +170,10 @@ const Sidebar = () => {
                 >
                   {purchaseMenu ? <HiChevronUp /> : <HiChevronDown />}
                 </span>
-              </div>
+              </div> */}
 
               {/* Purchase subMenu */}
-              {purchaseMenu && (
+              {/* {purchaseMenu && (
                 <div className="mx-8">
                   <NavLinkFunc
                     link="purchases/order"
@@ -186,7 +186,7 @@ const Sidebar = () => {
                     customFunc={() => handleCloseSidebar()}
                   />
                 </div>
-              )}
+              )} */}
             </div>
 
             {/* Customers */}
@@ -282,11 +282,11 @@ const Sidebar = () => {
                           title="Invoice Listing"
                           customFunc={() => handleCloseSidebar()}
                         />
-                        <NavLinkFunc
+                        {/* <NavLinkFunc
                           link="office/purchase-listing"
                           title="Purchase Listing"
                           customFunc={() => handleCloseSidebar()}
-                        />
+                        /> */}
                       </div>
                     )}
                   </div>

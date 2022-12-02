@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
-// import { Routes, Route } from 'react-router-dom';
-import DatePicker from 'react-datepicker';
-// import { IndividualReturn } from '../../components/components';
-import { useNavigate } from 'react-router-dom';
-
+import React, { useState } from "react";
+import { format, parseISO } from "date-fns";
+import DatePicker from "react-datepicker";
+import axios from "axios";
+import { useQuery } from "react-query";
+import { useNavigate } from "react-router-dom";
 
 const ReturnRecord = () => {
   const navigate = useNavigate();
   const [startDate, setStartDate] = useState(new Date());
+  const { data } = useQuery("getReturnRecords", () => {
+    return axios.get("http://localhost:4000/office/return-records");
+  });
 
   return (
     <div className="m-4 mt-20 md:mt-12 md:flex  justify-center gap-3">
@@ -42,55 +45,38 @@ const ReturnRecord = () => {
                 </tr>
               </thead>
               <tbody className="w-full">
-                <tr className="h-20 text-sm leading-none text-gray-800 bg-white hover:bg-gray-100 border-b border-t border-gray-100">
-                  <td className="pl-4 cursor-pointer">
-                    <p className="font-medium">Israel Stores Bashorun</p>
-                  </td>
-                  <td className="pl-4 cursor-pointer">
-                    <p className="font-medium">12/10/22</p>
-                  </td>
-                  <td className="pl-4 cursor-pointer">
-                    <p className="font-medium">0011</p>
-                  </td>
-                </tr>
-
-                <tr className="h-20 text-sm leading-none text-gray-800 bg-white hover:bg-gray-100 border-b border-t border-gray-100">
-                  <td className="pl-4 cursor-pointer">
-                    <p className="font-medium">Kennedy Stores</p>
-                  </td>
-                  <td className="pl-4 cursor-pointer">
-                    <p className="font-medium">12/10/22</p>
-                  </td>
-                  <td className="pl-4 cursor-pointer">
-                    <p className="font-medium">0256</p>
-                  </td>
-                </tr>
-
-                <tr
-                  className="h-20 text-sm leading-none text-gray-800 bg-white hover:bg-gray-100 border-b border-t border-gray-100"
-                  onClick={() => navigate("/office/return-records/0132")}
-                >
-                  <td className="pl-4 cursor-pointer">
-                    <p className="font-medium">Divine Rule Oreyo</p>
-                  </td>
-                  <td className="pl-4 cursor-pointer">
-                    <p className="font-medium">12/10/22</p>
-                  </td>
-                  <td className="pl-4 cursor-pointer">
-                    <p className="font-medium">0132</p>
-                  </td>
-                </tr>
+                {data?.data.map((data) => {
+                  return (
+                    <tr
+                      key={data._id}
+                      className="h-20 text-sm leading-none text-gray-800 bg-white hover:bg-gray-100 border-b border-t border-gray-100"
+                      onClick={() =>
+                        navigate(
+                          `/office/return-records/${data.invoiceNo}`
+                        )
+                      }
+                    >
+                      <td className="pl-4 cursor-pointer">
+                        <p className="font-medium">{data.customerName}</p>
+                      </td>
+                      <td className="pl-4 cursor-pointer">
+                        <p className="font-medium">
+                          {format(parseISO(data.createdAt), "dd/MM/yyyy")}
+                        </p>
+                      </td>
+                      <td className="pl-4 cursor-pointer">
+                        <p className="font-medium">{data.invoiceNo}</p>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
         </div>
       </div>
-
-      {/* <Routes>
-        <Route path=":id" element={<IndividualReturn />} />
-      </Routes> */}
     </div>
   );
-}
+};
 
-export default ReturnRecord
+export default ReturnRecord;

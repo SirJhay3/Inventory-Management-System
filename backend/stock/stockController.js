@@ -1,6 +1,5 @@
 const { AddStock, NewCategory } = require("./stockModel");
-const InventoryLog = require("../office/inventoryLog/inventoryLogModel");
-const InvoiceListing = require("../office/invoiceListing/invoiceListingModel");
+const { InventoryLog, InvoiceListing } = require('../office/officeModel');
 const { isValidObjectId } = require("../utils/validObjectId");
 
 // get stocks table
@@ -9,6 +8,18 @@ const displayStockTable = async (req, res) => {
 
   res.status(200).json(stocks);
 };
+
+const getSingleProduct = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const singleProduct = await AddStock.findOne({ productName: id })
+    
+    res.status(200).json(singleProduct)
+  } catch (error) {
+    res.status(400).json({message: error.message})
+  }
+}
 
 // post added stocks
 const addToStock = async (req, res) => {
@@ -21,9 +32,9 @@ const addToStock = async (req, res) => {
     const stock = await AddStock.create({
       productName: productName.replace(/^./, productName[0].toUpperCase()),
       category,
-      quantity,
-      unitPrice,
-      invoiceNo,
+      quantity: +quantity,
+      unitPrice: +unitPrice,
+      invoiceNo: +invoiceNo,
       image: {
         path,
         filename,
@@ -39,10 +50,11 @@ const addToStock = async (req, res) => {
     // create an inventory log
     await InventoryLog.create({
       product: stock._id,
-      invoiceNo,
+      invoiceNo: +invoiceNo,
       description: "Stock",
       quantity: +quantity,
-      balance: +quantity,
+      amount: +quantity * stock.unitPrice,
+      balanceQty: +quantity,
     });
 
     res.status(200).json({ stock, message: "Product Added Successfully" });
@@ -51,10 +63,6 @@ const addToStock = async (req, res) => {
     res.status(400).json({ error: err.message });
   }
 };
-
-// const update = async (req, res) => {
-//   console.log(req.params, req.body);
-// }
 
 // /stocks/:productId/update
 const updateStock = async (req, res) => {
@@ -98,7 +106,7 @@ const updateStock = async (req, res) => {
           : stockActionType === "remove"
           ? product.quantity - +quantity
           : quantity;
-    if (unitPrice) product.unitPrice = unitPrice;
+    if (unitPrice) product.unitPrice = +unitPrice;
     // if (invoiceNo) product.invoiceNo = invoiceNo;
 
     await product.save();
@@ -132,11 +140,11 @@ const updateStock = async (req, res) => {
 
       switch (stockActionType) {
         case "add":
-          newBalance = +lastInventoryLog.balance + +quantity;
+          newBalance = +lastInventoryLog.balanceQty + +quantity;
           break;
 
         case "remove":
-          newBalance = +lastInventoryLog.balance - +quantity;
+          newBalance = +lastInventoryLog.balanceQty - +quantity;
           break;
       }
 
@@ -144,8 +152,9 @@ const updateStock = async (req, res) => {
         product: product._id,
         description: 'Stock',
         invoiceNo: +invoiceNo,
+        // amount: +quantity * product.unitPrice,
         quantity: +quantity,
-        balance: +newBalance,
+        balanceQty: +newBalance,
         
       });
     }
@@ -170,7 +179,7 @@ const addNewCategory = async (req, res) => {
   const { category } = req.body;
   try {
     const newCategory = await NewCategory.create({ name: category });
-    res.status(200).json(newCategory);
+    res.status(200).json({ newCategory, message: "New Category Added" });
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
@@ -179,6 +188,7 @@ const addNewCategory = async (req, res) => {
 module.exports = {
   addToStock,
   displayStockTable,
+  getSingleProduct,
   getAllCategory,
   addNewCategory,
   updateStock

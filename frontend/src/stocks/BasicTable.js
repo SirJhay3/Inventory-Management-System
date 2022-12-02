@@ -11,7 +11,7 @@ import { COLUMNS } from "./column";
 import GlobalFilter from "./GlobalFilter";
 import { FiEdit } from "react-icons/fi";
 
-export const BasicTable = ({ setShowModal, setStockDetails, stockDetails, stockData }) => {
+export const BasicTable = ({setStockDetails, stockDetails, stockData }) => {
 
   const navigate = useNavigate();
  

@@ -5,15 +5,71 @@ import {
   //   useGlobalFilter,
   usePagination,
 } from "react-table";
+import { BsBatteryHalf } from "react-icons/bs";
+import { TiTick } from "react-icons/ti";
+import { format, parseISO } from "date-fns";
+import { useQuery } from "react-query";
+import axios from "axios";
 import { useStateContext } from "../contexts/ContextProvider";
-import CustomerData from "../data/CustomerData.json";
-import { COLUMNS } from "./columns";
 // import GlobalFilter from "./GlobalFilter";
 
 export const CustomerInfoTable = () => {
+  const { currentColor, currentCustomer } = useStateContext();
+
+  const { data: tableData } = useQuery("customerSalesDetails", () => {
+    return axios.get(`http://localhost:4000/customers/${currentCustomer}`);
+  });
+  console.log(tableData);
   // needs both data and columns to be memoized
-  const columns = useMemo(() => COLUMNS, []);
-  const data = useMemo(() => CustomerData, []);
+  const columns = useMemo(
+    () => [
+      {
+        Header: "Date",
+        accessor: "createdAt",
+        Cell: (props) => {
+          return (
+            <p>
+              {format(parseISO(props.row.original.createdAt), "dd/MM/yyyy")}
+            </p>
+          );
+        },
+      },
+      {
+        Header: "Invoice No",
+        accessor: "invoiceNo",
+      },
+      {
+        Header: "Total Amount",
+        accessor: "totalAmount",
+      },
+      {
+        Header: "Balance",
+        accessor: "balance",
+      },
+      {
+        Header: "status",
+        accessor: "debtStatus",
+
+        Cell: (props) => {
+          if (props.row.original.debtStatus === "completed") {
+            return (
+              <p className="flex justify-center">
+                <TiTick />
+              </p>
+            );
+          } else {
+            return (
+              <p className="flex justify-center">
+                <BsBatteryHalf />
+              </p>
+            );
+          }
+        },
+      },
+    ],
+    []
+  );
+  const data = useMemo(() => (tableData ? tableData.data : []), [tableData]);
 
   // create a table instance
   const {
@@ -48,13 +104,9 @@ export const CustomerInfoTable = () => {
 
   // Global filtering
   const { pageIndex, pageSize } = state;
-  const { currentColor } = useStateContext();
 
   return (
     <>
-      {/* <div className="flex justify-center md:justify-end mb-4 p-2">
-        <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
-      </div> */}
 
       <table
         {...getTableProps()}
@@ -113,16 +165,6 @@ export const CustomerInfoTable = () => {
             );
           })}
         </tbody>
-
-        {/* <tfoot>
-          {footerGroups.map((footerGroup) => (
-            <tr {...footerGroup.getFooterGroupProps()}>
-              {footerGroup.headers.map((column) => (
-                <td {...column.getFooterProps}>{column.render("Footer")}</td>
-              ))}
-            </tr>
-          ))}
-        </tfoot> */}
       </table>
 
       {/* Paginations */}

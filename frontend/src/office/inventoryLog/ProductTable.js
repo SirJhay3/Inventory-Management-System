@@ -1,20 +1,60 @@
 import React, { useMemo } from "react";
 import {
   useTable,
-  //   useSortBy,
-  //   useGlobalFilter,
   usePagination,
 } from "react-table";
+import { format, parseISO } from "date-fns";
 import { useStateContext } from "../../contexts/ContextProvider";
-import InventoryLogData from "../../data/InventoryLogData.json";
-import { COLUMNS } from "./columns";
-// import GlobalFilter from "./GlobalFilter";
 
 
-export const ProductTable = () => {
+
+
+export const ProductTable = ({tableData}) => {
   // needs both data and columns to be memoized
-  const columns = useMemo(() => COLUMNS, []);
-  const data = useMemo(() => InventoryLogData, []);
+  const columns = useMemo(
+    () => [
+      {
+        Header: "Date",
+        accessor: "createdAt",
+        Cell: (props) => {
+          return (
+            <p>
+              {format(parseISO(props.row.original.createdAt), "dd/MM/yyyy")}
+            </p>
+          );
+        },
+      },
+      {
+        Header: "Description",
+        accessor: "description",
+      },
+      {
+        Header: "Quantity",
+        accessor: "quantity",
+        Cell: (props) => {
+          if (props.row.original.description === "Sales") {
+            return (
+              <p className="flex justify-center text-red-500">
+                {props.row.original.quantity}
+              </p>
+            );
+          } else {
+            return (
+              <p className="flex justify-center">
+                {props.row.original.quantity}
+              </p>
+            );
+          }
+        },
+      },
+      {
+        Header: "Quantity In-Stock",
+        accessor: "balanceQty",
+      },
+    ],
+    []
+  );
+  const data = useMemo(() => tableData ? tableData : [], [tableData]);
 
   // create a table instance
   const {

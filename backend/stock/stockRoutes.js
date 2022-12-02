@@ -9,7 +9,8 @@ const {
   displayStockTable,
   getAllCategory,
   addNewCategory,
-  updateStock
+  updateStock,
+  getSingleProduct
 } = require("./stockController");
 
 const storage = require('../utils/cloudinary')
@@ -46,10 +47,8 @@ router.get("/", (req, res) => {
 
 router.get("/view", displayStockTable);
 
-// GET added stocks form
-router.get("/add", (req, res) => {
-  res.json({ mssg: "Add Stocks" });
-});
+// get a single stock
+router.get('/view/:id', getSingleProduct);
 
 // POST new stocks
 router.post("/add", upload.single("image"), addToStock);

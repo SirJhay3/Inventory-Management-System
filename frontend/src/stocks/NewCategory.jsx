@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { MdOutlineCancel } from "react-icons/md";
 import axios from "axios";
+import { useQueryClient } from "react-query";
 
 const NewCategory = () => {
   const navigate = useNavigate();
@@ -11,17 +12,22 @@ const NewCategory = () => {
   const [categoryName, setCategoryName] = useState("");
   const [text, setText] = useState("Submit");
   const [isLoading, setIsLoading] = useState(false);
+  const queryClient = useQueryClient()
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const newCategory = { category: categoryName };
+    
 
     try {
       setText("Submitting...");
       setIsLoading(true);
-      const response = await axios.post("/stocks/add/category", newCategory);
-      toast.success("New Category Added");
-      // console.log(response.data);
+      const response = await axios.post(
+        "http://localhost:4000/stocks/add/category",
+        newCategory
+      );
+      toast.success(response.data.message);
+      queryClient.invalidateQueries('categories')
       setCategoryName("");
       setText("Submit");
       setIsLoading(false);

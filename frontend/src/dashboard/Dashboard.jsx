@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useQuery } from 'react-query';
+import axios from 'axios';
 import DatePicker from "react-datepicker";
 import BarChartComponent from './BarChart';
 import PieChartComponent from './PieChart';
@@ -36,6 +38,9 @@ const Dashboard = () => {
   const [isMonthClicked, setIsMonthClicked] = useState(true);
   const [isYearClicked, setIsYearClicked] = useState(false);
   const [startDate, setStartDate] = useState(new Date());
+  const { data } = useQuery('dashboardStats', () => {
+    return axios.get('http://localhost:4000/dashboard');
+  })
 
   return (
     <>
@@ -52,28 +57,28 @@ const Dashboard = () => {
             color="rgb(228, 106, 118)"
             backgroundColor="rgb(255, 244, 229)"
             icon={<FiBarChart />}
-            stat="50,000"
+            stat={data?.data.totalSales}
             name="Sales"
           />
           <DashboardStats
             color="rgb(0, 194, 146)"
             backgroundColor="rgb(235, 250, 242)"
             icon={<BiCart />}
-            stat="4000"
+            stat="4"
             name="Orders"
           />
           <DashboardStats
             color="rgb(255, 244, 229)"
             backgroundColor="rgb(254, 201, 15)"
             icon={<BsBoxSeam />}
-            stat="1250"
+            stat={data?.data.totalProducts}
             name="Products"
           />
           <DashboardStats
             color="#03C9D7"
             backgroundColor="#E5FAFB"
             icon={<MdOutlineSupervisorAccount />}
-            stat="30"
+            stat={data?.data.totalCustomers}
             name="Customers"
           />
         </div>
@@ -141,10 +146,7 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* Feeds */}
-        {/* <div className="mt-8 w-400 md:w-760 m-6 mx-auto bg-white p-4">
-          <p className="capitalize text-xl font-semibold text-center">feeds</p>
-        </div> */}
+        
       </div>
     </>
   );

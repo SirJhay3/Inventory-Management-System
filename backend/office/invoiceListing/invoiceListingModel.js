@@ -11,4 +11,4 @@ const InvoiceListingSchema = new Schema({
 
 const InvoiceListing = mongoose.model('Invoice Listing', InvoiceListingSchema);
 
-module.exports = InvoiceListing
+module.exports = {InvoiceListing}

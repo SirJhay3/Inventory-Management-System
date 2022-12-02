@@ -9,7 +9,7 @@ const InventoryLogSchema = new Schema({
   invoiceNo: Number,
   description: String,
   quantity: Number,
-  balance: Number,
+  balanceQty: Number,
 
   createdAt: {
     type: Date,
@@ -19,4 +19,4 @@ const InventoryLogSchema = new Schema({
 
 const InventoryLog = mongoose.model("Inventory Log", InventoryLogSchema);
 
-module.exports = InventoryLog;
+module.exports = { InventoryLog };

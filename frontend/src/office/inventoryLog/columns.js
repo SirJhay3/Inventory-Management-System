@@ -1,7 +1,7 @@
 export const COLUMNS = [
   {
     Header: "Date",
-    accessor: "date",
+    accessor: "createdAt",
   },
   {
     Header: "Description",
@@ -13,6 +13,6 @@ export const COLUMNS = [
   },
   {
     Header: "Quantity In-Stock",
-    accessor: "quantity-left",
+    accessor: "balanceQty",
   },
 ];

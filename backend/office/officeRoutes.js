@@ -1,7 +1,33 @@
 const express = require('express');
-const router = express.Router()
-const { getAllInvoice } = require('./invoiceListing/invoiceListingController');
+const { paginatedResults } = require('../utils/paginate');
+const { InvoiceListing } = require('./officeModel');
+const { AddStock } = require('../stock/stockModel');
+const {
+  getAllProducts,
+  getProductsById,
+  getAllInvoice,
+  getSingleInvoice,
+  getReturnRecords,
+  getSingleReturnRecord
+} = require("./officeController");
+const router = express.Router();
 
-router.get('/invoice-listing', getAllInvoice);
+// RETURN RECORDS
+router.get('/return-records', getReturnRecords)
+
+router.get('/return-records/:id', getSingleReturnRecord)
+
+// INVOICE LISTING
+// get all invoices
+router.get('/invoice-listing', paginatedResults(InvoiceListing), getAllInvoice);
+
+// get a single invoice details
+router.get('/invoice-listing/:id', getSingleInvoice);
+
+
+// INVENTORY LOG
+router.get('/inventory-log', paginatedResults(AddStock), getAllProducts)
+
+router.get('/inventory-log/:id', getProductsById)
 
 module.exports = router
