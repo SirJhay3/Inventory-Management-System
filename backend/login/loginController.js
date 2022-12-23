@@ -1,8 +1,9 @@
 const { Customers } = require("../customer/customerModel");
 const generateToken = require("../utils/generateToken");
+const asyncHandler = require("express-async-handler");
 
 const registerUser = async (req, res) => {
-  const { name, email, password, storeName, address, phoneNo } = req.body;
+  const { email, password, storeName, storeAddress, phoneNumber } = req.body;
   try {
     const customerExists = await Customers.findOne({ email });
     if (customerExists) {
@@ -11,21 +12,19 @@ const registerUser = async (req, res) => {
 
     // create new user
     const user = await Customers.create({
-      name,
       email,
       password,
       storeName,
-      address,
-      phoneNo,
+      storeAddress,
+      phoneNumber,
     });
     if (user) {
       res.status(200).json({
         _id: user._id,
-        name: user.name,
         email: user.email,
         storeName: user.storeName,
-        address: user.address,
-        phoneNo: user.phoneNo,
+        storeAddress: user.storeAddress,
+        phoneNumber: user.phoneNumber,
         // generate a jwt and send back to the user
         token: generateToken(user._id),
       });
@@ -46,11 +45,10 @@ const authUser = async (req, res) => {
     if (user && (await user.matchPassword(password))) {
       res.status(200).json({
         _id: user._id,
-        name: user.name,
         email: user.email,
         storeName: user.storeName,
-        address: user.address,
-        phoneNo: user.phoneNo,
+        address: user.storeAddress,
+        phoneNo: user.phoneNumber,
         // generate a jwt and send back to the user
         token: generateToken(user._id),
       });
@@ -65,8 +63,7 @@ const authUser = async (req, res) => {
 //@description     Get or Search all users
 //@route           GET /api/user?search=
 
-const allUsers = async (req, res) => {
-  // find match by query params
+const allUsers = asyncHandler(async (req, res) => {
   const keyword = req.query.search
     ? {
         $or: [
@@ -76,16 +73,10 @@ const allUsers = async (req, res) => {
       }
     : {};
 
-  try {
-    // find others users apart from the searched user
-    const users = await Customers.find(keyword).find({
-      _id: { $ne: req.user._id },
-    });
-
-    res.status(200).json(users);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-};
+  const users = await Customers.find(keyword).find({
+    _id: { $ne: req.user._id },
+  });
+  res.send(users);
+});
 
 module.exports = { registerUser, authUser, allUsers };

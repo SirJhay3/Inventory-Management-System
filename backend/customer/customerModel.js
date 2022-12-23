@@ -4,9 +4,6 @@ const Schema = mongoose.Schema;
 
 const CustomerSchema = new Schema(
   {
-    name: {
-      type: String,
-    },
     storeName: {
       type: String,
       unique: true,
@@ -15,21 +12,21 @@ const CustomerSchema = new Schema(
       type: String,
       required: true,
     },
-    address: {
+    storeAddress: {
       type: String,
     },
-    phoneNo: {
+    phoneNumber: {
       type: String,
     },
     email: {
       type: String,
       unique: true,
     },
-    pic: {
-      type: String,
-      default:
-        "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg",
-    },
+    // pic: {
+    //   type: String,
+    //   default:
+    //     "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg",
+    // },
   },
   { timestamps: true }
 );

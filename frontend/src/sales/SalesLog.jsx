@@ -5,7 +5,6 @@ import DatePicker from "react-datepicker";
 import { useQuery } from "react-query";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import IndividualSalesLog from "./IndividualSalesLog";
-import { useStateContext } from "../contexts/ContextProvider";
 
 const getSalesDetails = async ({ queryKey }) => {
   const salesInfo = await axios.get(
@@ -15,7 +14,6 @@ const getSalesDetails = async ({ queryKey }) => {
 };
 
 const SalesLog = () => {
-  const { setSalesId } = useStateContext();
   const navigate = useNavigate();
   const [page, setPage] = useState(1);
   const [startDate, setStartDate] = useState(new Date());
@@ -53,9 +51,7 @@ const SalesLog = () => {
             <table className="w-full whitespace-nowrap">
               <thead>
                 <tr className="h-16 w-full text-sm leading-none text-gray-800">
-                  <th className="font-bold  text-left  pl-4">
-                    Customer Name
-                  </th>
+                  <th className="font-bold  text-left  pl-4">Customer Name</th>
                   <th className="font-bold text-left pl-4">Date</th>
                   <th className="font-bold text-left pl-4">Invoice No</th>
                 </tr>
@@ -66,7 +62,6 @@ const SalesLog = () => {
                     <tr
                       key={data._id}
                       onClick={() => {
-                        setSalesId(data._id)
                         navigate(`/sales/logs/${data._id}`);
                       }}
                       className="h-20 text-sm leading-none text-gray-800 bg-white hover:bg-gray-100 border-b border-t border-gray-100"
@@ -115,7 +110,10 @@ const SalesLog = () => {
       </div>
 
       <Routes>
-        <Route path=":id" element={<IndividualSalesLog customerData={ data } />} />
+        <Route
+          path=":id"
+          element={<IndividualSalesLog customerData={data} />}
+        />
       </Routes>
     </div>
   );

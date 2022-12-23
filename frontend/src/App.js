@@ -3,6 +3,7 @@ import { FiSettings } from "react-icons/fi";
 import { ToastContainer } from "react-toastify";
 import {
   // Auth,
+  SignIn,
   Chats,
   Navbar,
   Sidebar,
@@ -20,6 +21,7 @@ import {
   SalesEvaluation,
   IndividualSalesLog,
   InvoiceListing,
+  DebtsListing,
   ReturnRecord,
   // PurchaseListing,
   Dashboard,
@@ -37,6 +39,7 @@ import "react-toastify/dist/ReactToastify.css"; //
 import { useStateContext } from "./contexts/ContextProvider";
 
 function App() {
+  const token = localStorage.getItem("userInfo");
   const {
     activeMenu,
     themeSettings,
@@ -45,11 +48,12 @@ function App() {
     currentMode,
   } = useStateContext();
 
+  if (!token) {
+    return <SignIn />;
+  }
+
   return (
     <div className={currentMode === "Dark" ? "dark" : ""}>
-      {/* <Routes>
-        <Route path="/" element={<Auth />} />
-      </Routes> */}
       {/* <BrowserRouter> */}
       {/* main container */}
       <div className="flex relative dark:bg-main-dark-bg">
@@ -86,7 +90,7 @@ function App() {
 
             <Routes>
               {/* Dashboard route */}
-              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/" element={<Dashboard />} />
 
               {/* Chat route */}
               <Route path="/chat" element={<Chats />} />
@@ -144,6 +148,7 @@ function App() {
                 path="/office/invoice-listing/:id"
                 element={<SingleInvoice />}
               />
+              <Route path="/office/debts-listing" element={<DebtsListing />} />
 
               {/* <Route
                 path="/office/purchase-listing"

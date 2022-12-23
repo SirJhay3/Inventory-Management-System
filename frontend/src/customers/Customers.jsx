@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Routes, Route, Link, useNavigate } from "react-router-dom";
-import axios from 'axios'
+import axios from "axios";
 import { useQuery } from "react-query";
-import  NewCustomer  from "./NewCustomer";
+import NewCustomer from "./NewCustomer";
 import { useStateContext } from "../contexts/ContextProvider";
 
 const getAllCustomers = async ({ queryKey }) => {
@@ -14,7 +14,7 @@ const getAllCustomers = async ({ queryKey }) => {
 
 const Customers = () => {
   const [page, setPage] = useState(1);
-  const { currentColor, setCurrentCustomer } = useStateContext();
+  const { currentColor } = useStateContext();
   const navigate = useNavigate();
   const { data, status, isPreviousData } = useQuery(
     ["allCustomers", page],
@@ -62,7 +62,6 @@ const Customers = () => {
                 <tr
                   key={data._id}
                   onClick={() => {
-                    setCurrentCustomer(data.name)
                     navigate(`/customers/${data.name}`);
                   }}
                   className="h-20 text-sm leading-none text-gray-800 bg-white hover:bg-gray-100 border-b border-t border-gray-100"

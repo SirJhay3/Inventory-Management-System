@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import {useNavigate} from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import {
   useTable,
   useSortBy,
@@ -8,13 +8,12 @@ import {
 } from "react-table";
 import { useStateContext } from "../contexts/ContextProvider";
 import { COLUMNS } from "./column";
-import GlobalFilter from "./GlobalFilter";
+// import GlobalFilter from "./GlobalFilter";
 import { FiEdit } from "react-icons/fi";
 
-export const BasicTable = ({setStockDetails, stockDetails, stockData }) => {
-
+export const BasicTable = ({ setStockDetails, stockDetails, stockData }) => {
   const navigate = useNavigate();
- 
+
   // needs both data and columns to be memoized
   const columns = useMemo(
     () => [
@@ -26,16 +25,15 @@ export const BasicTable = ({setStockDetails, stockDetails, stockData }) => {
           <div
             className="flex justify-center cursor-pointer"
             onClick={() => {
-              navigate(`/stocks/view/${props.row.original._id}`)
+              navigate(`/stocks/view/${props.row.original._id}`);
               setStockDetails(() => {
                 return {
-                ...stockDetails,
-                prodName: props.row.original.productName,
-                prodCategory: props.row.original.category,
-                prodUnitPrice: props.row.original.unitPrice
-                }
-                
-              })
+                  ...stockDetails,
+                  prodName: props.row.original.productName,
+                  prodCategory: props.row.original.category,
+                  prodUnitPrice: props.row.original.unitPrice,
+                };
+              });
             }}
           >
             <FiEdit size={20} />
@@ -45,7 +43,7 @@ export const BasicTable = ({setStockDetails, stockDetails, stockData }) => {
     ],
     [setStockDetails, stockDetails, navigate]
   );
-  const data = useMemo(() => stockData ? stockData.data : [] , [stockData]);
+  const data = useMemo(() => (stockData ? stockData.data : []), [stockData]);
 
   // create a table instance
   const {
@@ -67,7 +65,7 @@ export const BasicTable = ({setStockDetails, stockDetails, stockData }) => {
 
     prepareRow,
     state,
-    setGlobalFilter,
+    // setGlobalFilter,
   } = useTable(
     {
       columns,
@@ -79,16 +77,23 @@ export const BasicTable = ({setStockDetails, stockDetails, stockData }) => {
   );
 
   // Global filtering
-  const { globalFilter, pageIndex, pageSize } = state;
+  const {
+    // globalFilter,
+    pageIndex,
+    pageSize,
+  } = state;
   const { currentColor } = useStateContext();
 
   return (
     <>
-      <div className="flex justify-center md:justify-end mb-4 p-2">
+      {/* <div className="flex justify-center md:justify-end mb-4 p-2">
         <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
-      </div>
+      </div> */}
 
-      <table {...getTableProps()} style={{width: '100%', borderCollapse: 'collapse'}}>
+      <table
+        {...getTableProps()}
+        style={{ width: "100%", borderCollapse: "collapse" }}
+      >
         <thead>
           {headerGroups.map((headerGroup) => (
             <tr {...headerGroup.getHeaderGroupProps()}>

@@ -32,7 +32,9 @@ const Collections = () => {
   const { data: singleCustomerDetails } = useQuery(
     ["getSingleProduct", customer],
     () => {
-      return axios.get(`http://localhost:4000/collections/?q=${customer.value}`);
+      return axios.get(
+        `http://localhost:4000/collections/?q=${customer.value}`
+      );
     },
     {
       enabled: customer ? true : false,
@@ -92,9 +94,19 @@ const Collections = () => {
             />
           </div>
           <div className="mt-4 flex flex-col gap-2 justify-center items-center">
-            <p>Invoice No: {singleCustomerDetails?.data[0].invoiceNo}</p>
+            <p>
+              Invoice No:{" "}
+              {singleCustomerDetails?.data.length > 0
+                ? singleCustomerDetails?.data[0].invoiceNo
+                : ""}
+            </p>
 
-            <p>Balance: {singleCustomerDetails?.data[0].balance}</p>
+            <p>
+              Balance:{" "}
+              {singleCustomerDetails?.data.length > 0
+                ? singleCustomerDetails?.data[0].balance
+                : ""}
+            </p>
           </div>
         </fieldset>
 

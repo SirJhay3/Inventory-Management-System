@@ -1,27 +1,16 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import Cookies from "universal-cookie";
-
-const cookies = new Cookies();
 
 const UserProfile = ({ setProfile }) => {
   const navigate = useNavigate();
 
   const handleSignOut = () => {
-    cookies.remove("token");
-    cookies.remove("userId");
-    cookies.remove("username");
-    cookies.remove("fullname");
-    cookies.remove("email");
-    cookies.remove("phoneNo");
-
+    localStorage.removeItem("userInfo");
     setProfile(false);
-
     navigate("/");
-    window.location.reload();
   };
   return (
-    <div className="flex items-center absolute right-3 cursor-pointer">
+    <div className="flex items-center absolute right-6 cursor-pointer">
       <div className="rounded-full">
         <ul className="p-2 w-full border-r bg-white rounded  shadow mt-10 ">
           <li className="flex w-full justify-between text-gray-600 hover:text-indigo-700 cursor-pointer items-center">

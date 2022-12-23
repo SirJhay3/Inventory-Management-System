@@ -46,6 +46,17 @@ const getSingleInvoice = async (req, res) => {
   }
 };
 
+// DEBTS LISTING
+const getCustomersDebts = async (req, res) => {
+  try {
+    const sales = await Sales.find({ balance: { $gt: 0 } });
+
+    res.status(200).json(sales);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 // INVENTORY LOG
 const getAllProducts = async (req, res) => {
   res.json(res.paginatedResults);
@@ -75,6 +86,7 @@ module.exports = {
   getAllProducts,
   getProductsById,
   getAllInvoice,
+  getCustomersDebts,
   getSingleInvoice,
   getReturnRecords,
   getSingleReturnRecord,

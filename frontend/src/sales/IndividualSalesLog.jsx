@@ -1,18 +1,20 @@
 import React, { useMemo } from "react";
 import { useTable } from "react-table";
 import { useQuery } from "react-query";
+import { useParams } from "react-router-dom";
 import axios from "axios";
 import { useStateContext } from "../contexts/ContextProvider";
 
 const IndividualSalesLog = () => {
-  const { currentColor, salesId } = useStateContext();
+  const { id } = useParams();
+  const { currentColor } = useStateContext();
   const { data: singleCustomerData } = useQuery(
     "singleSaleData",
     () => {
-      return axios.get(`http://localhost:4000/sales/logs/${salesId}`);
+      return axios.get(`http://localhost:4000/sales/logs/${id}`);
     },
     {
-      enabled: salesId.length === 24,
+      enabled: id.length === 24,
     }
   );
 

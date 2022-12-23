@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Cookies from "universal-cookie";
 // import SideDrawer from "./SideDrawer";
-import Cart from "./Cart";
-import Notification from "./Notification";
+// import Cart from "./Cart";
+// import Notification from "./Notification";
 import UserProfile from "./UserProfile";
 import { AiOutlineMenu } from "react-icons/ai";
-import { FiShoppingCart } from "react-icons/fi";
+// import { FiShoppingCart } from "react-icons/fi";
 import { BsChatLeft } from "react-icons/bs";
-import { RiNotification3Line } from "react-icons/ri";
+// import { RiNotification3Line } from "react-icons/ri";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { CgProfile } from "react-icons/cg";
 import { useStateContext } from "../contexts/ContextProvider";
@@ -30,18 +29,17 @@ const NavButton = ({ title, customFunc, icon, color, dotColor }) => (
 );
 
 const Navbar = () => {
-  const cookies = new Cookies();
   const navigate = useNavigate();
   const [profile, setProfile] = useState(false);
   const {
     setActiveMenu,
-    isClicked,
-    handleClick,
+    // isClicked,
+    // handleClick,
     screenSize,
     setScreenSize,
     currentColor,
   } = useStateContext();
-  const user = cookies.get("username");
+  const { storeName: user } = JSON.parse(localStorage.getItem("userInfo"));
 
   // get the width of the window
   useEffect(() => {
@@ -78,12 +76,12 @@ const Navbar = () => {
       </div>
 
       <div className="flex">
-        <NavButton
+        {/* <NavButton
           title="Cart"
           customFunc={() => handleClick("cart")}
           color={currentColor}
           icon={<FiShoppingCart />}
-        />
+        /> */}
         <NavButton
           title="Chat"
           dotColor="#03c9d7"
@@ -91,16 +89,16 @@ const Navbar = () => {
           color={currentColor}
           icon={<BsChatLeft />}
         />
-        <NavButton
+        {/* <NavButton
           title="Notification"
           dotColor="#03C9D7"
           customFunc={() => handleClick("notification")}
           color={currentColor}
           icon={<RiNotification3Line />}
-        />
+        /> */}
         <div
-          className="flex items-center gap-2 cursor-pointer p-1 hover:bg-light-gray rounded-lg"
-          onClick={() => setProfile((prev) => !prev)}
+          className="flex items-center gap-2 cursor-pointer p-1 hover:bg-light-gray rounded-lg "
+          onClick={() => setProfile(!profile)}
         >
           <CgProfile />
           <p>
@@ -109,11 +107,13 @@ const Navbar = () => {
               {user ? user : "User"}
             </span>
           </p>
-          <MdKeyboardArrowDown className="text-gray-400 text-14" />
+          <p>
+            <MdKeyboardArrowDown className="text-gray-400 text-14" />
+          </p>
         </div>
         {/* {isClicked.search && <SideDrawer />} */}
-        {isClicked.cart && <Cart />}
-        {isClicked.notification && <Notification />}
+        {/* {isClicked.cart && <Cart />}
+        {isClicked.notification && <Notification />} */}
         {profile && <UserProfile setProfile={setProfile} />}
       </div>
     </div>

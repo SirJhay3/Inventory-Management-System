@@ -72,7 +72,7 @@ const Sidebar = () => {
             {/* Dashboard */}
             <div className="flex justify-between m-3 mt-4 items-center">
               <NavLinkFunc
-                link="/dashboard"
+                link="/"
                 title="DASHBOARD"
                 icon={<SiEsphome />}
                 customFunc={() => handleCloseSidebar()}
@@ -280,6 +280,11 @@ const Sidebar = () => {
                         <NavLinkFunc
                           link="office/invoice-listing"
                           title="Invoice Listing"
+                          customFunc={() => handleCloseSidebar()}
+                        />
+                        <NavLinkFunc
+                          link="office/debts-listing"
+                          title="Debts Listing"
                           customFunc={() => handleCloseSidebar()}
                         />
                         {/* <NavLinkFunc
