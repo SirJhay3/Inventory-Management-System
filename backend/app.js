@@ -7,7 +7,6 @@ require("dotenv").config();
 
 const loginRoutes = require("./login/loginRoutes");
 const stockRoutes = require("./stock/stockRoutes");
-const chatRoutes = require("./chat/chatRoutes");
 const officeRoutes = require("./office/officeRoutes");
 const customerRoutes = require("./customer/customerRoutes");
 const salesRoutes = require("./sales/salesRoutes");
@@ -55,7 +54,6 @@ mongoose
 
 // routes
 app.use("/user", loginRoutes);
-app.use("/chat", chatRoutes);
 app.use("/dashboard", dashboardRoutes);
 app.use("/stocks", stockRoutes);
 app.use("/office", officeRoutes);
